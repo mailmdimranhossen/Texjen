@@ -51,7 +51,7 @@ export async function printStickerInvoice(orderOrOrders: any | any[], settings: 
   const orders = Array.isArray(orderOrOrders) ? orderOrOrders : [orderOrOrders];
   if (orders.length === 0) return;
 
-  const storeName: string = settings?.siteName || settings?.brandName || 'Gentsity';
+  const storeName: string = settings?.siteName || settings?.brandName || 'Texjen';
 
   // Dynamic theme variables
   let primary = '#00D1B2';

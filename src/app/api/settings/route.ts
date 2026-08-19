@@ -33,9 +33,9 @@ export async function GET() {
     const settings = await GlobalSettings.findOne().sort({ updatedAt: -1 });
     if (!settings) {
       return NextResponse.json({
-        brandName: process.env.NEXT_PUBLIC_STORE_NAME || "Gentsity",
+        brandName: process.env.NEXT_PUBLIC_STORE_NAME || "Texjen",
         contact: {
-          email: "support@Gentsity.com",
+          email: "support@Texjen.com",
           phone: "+8801234567890",
           address: "Dhaka, Bangladesh"
         },
@@ -48,8 +48,8 @@ export async function GET() {
           tiktok: '',
           whatsapp: ''
         },
-        marqueeText: "Welcome to Gentsity!",
-        metaTitle: process.env.NEXT_PUBLIC_STORE_NAME || "Gentsity",
+        marqueeText: "Welcome to Texjen!",
+        metaTitle: process.env.NEXT_PUBLIC_STORE_NAME || "Texjen",
         metaDescription: "The most popular online shop in Bangladesh.",
         logoUrl: "/logo.webp",
         freeDeliveryThreshold: 0,

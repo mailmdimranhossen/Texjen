@@ -1,7 +1,7 @@
 import { format, isValid } from 'date-fns';
 
 export async function generateBillPDF(bill: any, settings: any, mode: 'download' | 'print' = 'download') {
-  const brandName = settings?.brandName || "Gentsity";
+  const brandName = settings?.brandName || "Texjen";
   const brandEmail = settings?.contact?.email || "";
   const brandPhone = settings?.contact?.phone || "";
   const brandAddress = settings?.contact?.address || "";
@@ -374,7 +374,7 @@ export async function generateBillPDF(bill: any, settings: any, mode: 'download'
   if (printWindow) {
     printWindow.document.write(htmlContent);
     printWindow.document.close();
-    
+
     printWindow.onload = () => {
       printWindow.focus();
       printWindow.print();
@@ -382,7 +382,7 @@ export async function generateBillPDF(bill: any, settings: any, mode: 'download'
         printWindow.close();
       }
     };
-    
+
     setTimeout(() => {
       if (printWindow.document.readyState === 'complete') {
         printWindow.focus();

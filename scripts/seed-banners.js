@@ -16,7 +16,7 @@ if (fs.existsSync(envPath)) {
 
 if (!mongodbUri) {
   // Fallback if env file doesn't parse correctly
-  mongodbUri = 'mongodb+srv://gentsity:S4Epscw0SOkd5ZtG@cluster0.e5n1hnl.mongodb.net/gentsity';
+  mongodbUri = 'mongodb+srv://texjen:S4Epscw0SOkd5ZtG@cluster0.e5n1hnl.mongodb.net/texjen';
 }
 
 console.log('Connecting to MongoDB...');
@@ -84,8 +84,8 @@ const banners = [
     isActive: true,
   },
   {
-    title: 'The Gentsity Collection',
-    image: '/assets/images/Banner/gentsity-exclusive-collection-banner.webp',
+    title: 'The Texjen Collection',
+    image: '/assets/images/Banner/texjen-exclusive-collection-banner.webp',
     link: '/shop',
     primaryBtnText: 'Shop Collection',
     primaryBtnLink: '/shop',
@@ -102,7 +102,7 @@ async function seed() {
       await mongoose.connect(mongodbUri);
     } catch (connErr) {
       console.log('SRV connection failed, trying direct connection fallback...');
-      const directUri = 'mongodb://gentsity:xI2QuBaFZsYQ5vRD@ac-jrowhop-shard-00-00.e5n1hnl.mongodb.net:27017,ac-jrowhop-shard-00-01.e5n1hnl.mongodb.net:27017,ac-jrowhop-shard-00-02.e5n1hnl.mongodb.net:27017/gentsity?ssl=true&authSource=admin';
+      const directUri = 'mongodb://texjen:xI2QuBaFZsYQ5vRD@ac-jrowhop-shard-00-00.e5n1hnl.mongodb.net:27017,ac-jrowhop-shard-00-01.e5n1hnl.mongodb.net:27017,ac-jrowhop-shard-00-02.e5n1hnl.mongodb.net:27017/texjen?ssl=true&authSource=admin';
       await mongoose.connect(directUri);
     }
     console.log('Connected to MongoDB successfully.');

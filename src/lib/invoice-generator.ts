@@ -4,7 +4,7 @@ export async function generateInvoicePDF(orderOrOrders: any | any[], settings: a
   const orders = Array.isArray(orderOrOrders) ? orderOrOrders : [orderOrOrders];
   if (orders.length === 0) return;
 
-  const brandName = settings?.brandName || "Gentsity";
+  const brandName = settings?.brandName || "Texjen";
   const brandEmail = settings?.contact?.email || "";
   const brandPhone = settings?.contact?.phone || "";
   const brandAddress = settings?.contact?.address || "";
@@ -326,7 +326,7 @@ export async function generateInvoicePDF(orderOrOrders: any | any[], settings: a
   if (printWindow) {
     printWindow.document.write(htmlContent);
     printWindow.document.close();
-    
+
     // Allow fonts and stylesheets to load
     printWindow.onload = () => {
       printWindow.focus();

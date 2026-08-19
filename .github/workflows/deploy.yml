@@ -1,4 +1,4 @@
-name: Deploy Gentsity to DigitalOcean
+name: Deploy Texjen to DigitalOcean
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
 
 env:
   DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-  DOCKER_IMAGE_NAME: gentsity-app
-  DOCKER_IMAGE_TAG: ${{ secrets.DOCKER_HUB_USERNAME }}/gentsity-app:latest
+  DOCKER_IMAGE_NAME: texjen-app
+  DOCKER_IMAGE_TAG: ${{ secrets.DOCKER_HUB_USERNAME }}/texjen-app:latest
 
 jobs:
   build-and-push:
@@ -47,14 +47,14 @@ jobs:
           username: ${{ secrets.DROPLET_USER }}
           key: ${{ secrets.DROPLET_SSH_KEY }}
           script: |
-            mkdir -p ~/gentsity
-            cd ~/gentsity
+            mkdir -p ~/texjen
+            cd ~/texjen
 
             cat << 'EOF' > docker-compose.yml
             services:
               web:
                 image: ${{ env.DOCKER_IMAGE_TAG }}
-                container_name: gentsity-app
+                container_name: texjen-app
                 restart: unless-stopped
                 ports:
                   - "3000:3000"

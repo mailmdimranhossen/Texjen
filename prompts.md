@@ -1,6 +1,6 @@
-# Gentsity Product Image AI Prompts (1:1 Aspect Ratio)
+# Texjen Product Image AI Prompts (1:1 Aspect Ratio)
 
-This document contains **25 professional product image prompts** (5 products for each of the 5 categories) for the Gentsity storefront.
+This document contains **25 professional product image prompts** (5 products for each of the 5 categories) for the Texjen storefront.
 
 Please generate these images in a **1:1 square aspect ratio** (using Midjourney, DALL-E 3, or FLUX). Convert them to **`.webp`** format, name them exactly as shown below, and place them inside the **`public/assets/images/products`** folder.
 

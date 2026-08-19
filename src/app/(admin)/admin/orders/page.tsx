@@ -58,7 +58,7 @@ const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
     height="1em"
     {...props}
   >
-    <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.37 5.054L2 22l5.132-1.347a9.937 9.937 0 004.877 1.28h.005c5.505 0 9.989-4.478 9.99-9.985A9.992 9.992 0 0012.012 2zm5.836 14.199c-.32.899-1.576 1.706-2.185 1.761-.559.05-1.286.074-2.074-.176a9.839 9.839 0 01-4.705-3.023 9.388 9.388 0 01-1.926-3.412 5.097 5.097 0 01-.137-2.138c.112-.601.442-1.01.691-1.272.249-.262.502-.328.67-.328.167 0 .335.006.475.014.148.009.347-.058.544.417.202.489.691 1.684.75 1.805.059.12.098.262.019.41-.079.158-.12.262-.24.399-.118.136-.251.306-.358.411-.118.114-.242.238-.104.475.138.238.614 1.01.32.957.382.341.703.56.963.666.26.106.41.088.56-.079.15-.167.643-.75.814-.999.171-.249.34-.208.573-.122.233.086 1.48.697 1.737.825.257.128.428.192.488.295.06.103.06.596-.26 1.495z"/>
+    <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.37 5.054L2 22l5.132-1.347a9.937 9.937 0 004.877 1.28h.005c5.505 0 9.989-4.478 9.99-9.985A9.992 9.992 0 0012.012 2zm5.836 14.199c-.32.899-1.576 1.706-2.185 1.761-.559.05-1.286.074-2.074-.176a9.839 9.839 0 01-4.705-3.023 9.388 9.388 0 01-1.926-3.412 5.097 5.097 0 01-.137-2.138c.112-.601.442-1.01.691-1.272.249-.262.502-.328.67-.328.167 0 .335.006.475.014.148.009.347-.058.544.417.202.489.691 1.684.75 1.805.059.12.098.262.019.41-.079.158-.12.262-.24.399-.118.136-.251.306-.358.411-.118.114-.242.238-.104.475.138.238.614 1.01.32.957.382.341.703.56.963.666.26.106.41.088.56-.079.15-.167.643-.75.814-.999.171-.249.34-.208.573-.122.233.086 1.48.697 1.737.825.257.128.428.192.488.295.06.103.06.596-.26 1.495z" />
   </svg>
 );
 
@@ -88,7 +88,7 @@ function FraudCheckBadge({ phone }: { phone?: string }) {
           });
           fraudPendingRequests[phone] = promise;
         }
-        
+
         const json = await promise;
         if (json?.status === 'success' && json?.data?.summary) {
           const summary = json.data.summary;
@@ -334,7 +334,7 @@ function OrdersContent() {
           shippingAddress: {
             ...manualCustomer,
             phone: cleanedPhone || manualCustomer.phone,
-            email: manualCustomer.email || `${cleanedPhone || Date.now()}@gentsity-guest.com`
+            email: manualCustomer.email || `${cleanedPhone || Date.now()}@texjen-guest.com`
           },
           items: manualItems.map(item => ({
             product: item.product,
@@ -869,9 +869,9 @@ function OrdersContent() {
                     className={statusFilter === status ? "bg-accent font-bold" : ""}
                   >
                     <div className="flex items-center justify-between w-full">
-                      <span>{status === 'Order Placed' ? 'Placed' : 
-                            status === 'Ready for Delivery' ? 'Ready' :
-                            status === 'Released for Delivery' ? 'Released' : status}</span>
+                      <span>{status === 'Order Placed' ? 'Placed' :
+                        status === 'Ready for Delivery' ? 'Ready' :
+                          status === 'Released for Delivery' ? 'Released' : status}</span>
                       <Badge variant="secondary" className="ml-2 text-[10px] px-1.5 py-0">
                         {statusCounts[status] || 0}
                       </Badge>
@@ -944,19 +944,17 @@ function OrdersContent() {
                 setStatusFilter(status.value);
                 setCurrentPage(1);
               }}
-              className={`w-full py-2 text-xs font-semibold rounded-md transition-all duration-200 text-center flex items-center justify-center gap-1.5 border border-input ${
-                isActive
+              className={`w-full py-2 text-xs font-semibold rounded-md transition-all duration-200 text-center flex items-center justify-center gap-1.5 border border-input ${isActive
                   ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'bg-background hover:bg-muted text-muted-foreground'
-              }`}
+                }`}
               title={status.label}
             >
               <span>{status.label}</span>
-              <span className={`px-1.5 py-0.5 text-[10px] rounded-full ${
-                isActive 
-                  ? 'bg-primary-foreground/20 text-primary-foreground font-bold' 
+              <span className={`px-1.5 py-0.5 text-[10px] rounded-full ${isActive
+                  ? 'bg-primary-foreground/20 text-primary-foreground font-bold'
                   : 'bg-muted-foreground/15 text-muted-foreground font-bold'
-              }`}>
+                }`}>
                 {count}
               </span>
             </button>
@@ -1091,11 +1089,11 @@ function OrdersContent() {
                           <Badge className="bg-yellow-500 text-black hover:bg-yellow-600 border-none text-[9px] px-1 py-0 h-4">Repeat</Badge>
                         ) : null}
                       </div>
-                      
+
                       <div className="flex flex-col text-[11px] text-slate-700 dark:text-zinc-300 mt-1 space-y-0.5">
                         <span className="font-semibold text-slate-900 dark:text-white break-words block">{order.shippingAddress?.fullName || order.user?.name || 'Guest User'}</span>
                         <div className="flex items-center gap-1.5">
-                          <span 
+                          <span
                             onClick={() => order.shippingAddress?.phone && setSearchTerm(order.shippingAddress.phone)}
                             className="text-muted-foreground hover:text-primary cursor-pointer hover:underline font-medium"
                           >
@@ -1103,7 +1101,7 @@ function OrdersContent() {
                           </span>
                           {order.shippingAddress?.phone && (
                             <>
-                              <a 
+                              <a
                                 href={`https://wa.me/${order.shippingAddress.phone.replace(/[^0-9]/g, '').startsWith('88') ? order.shippingAddress.phone.replace(/[^0-9]/g, '') : '88' + (order.shippingAddress.phone.replace(/[^0-9]/g, '').startsWith('0') ? order.shippingAddress.phone.replace(/[^0-9]/g, '').slice(1) : order.shippingAddress.phone.replace(/[^0-9]/g, ''))}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -1188,10 +1186,10 @@ function OrdersContent() {
                     <div className="flex items-center justify-end gap-1.5">
                       {order.paymentMethod === 'Manual' && order.paymentStatus === 'Pending' && order.status !== 'Cancelled' && (
                         <div className="flex items-center gap-1">
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-8 w-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/30" 
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/30"
                             title="Approve Manual Payment"
                             onClick={() => {
                               Swal.fire({
@@ -1210,10 +1208,10 @@ function OrdersContent() {
                           >
                             <CheckCircle className="h-4 w-4" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-8 w-8 text-destructive hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30" 
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-destructive hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
                             title="Cancel Order"
                             onClick={() => handleCancelOrder(order._id)}
                           >
@@ -1430,7 +1428,7 @@ function OrdersContent() {
               {/* Right Column: Products */}
               <div className="space-y-4">
                 <h3 className="font-semibold text-sm border-b pb-1 text-primary">Products & Pricing</h3>
-                
+
                 <div className="relative">
                   <Label className="text-xs">Search & Add Product</Label>
                   <div className="relative mt-1">
@@ -1442,7 +1440,7 @@ function OrdersContent() {
                       className="pl-8 h-9"
                     />
                   </div>
-                  
+
                   {productSearchResults.length > 0 && (
                     <div className="absolute z-50 w-full mt-1 bg-white dark:bg-zinc-950 border rounded-md shadow-lg max-h-60 overflow-y-auto">
                       {productSearchResults.map((prod) => (

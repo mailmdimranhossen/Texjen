@@ -1,7 +1,7 @@
 services:
   web:
     image: ${DOCKER_IMAGE_TAG}
-    container_name: gentsity-app
+    container_name: texjen-app
     restart: unless-stopped
     ports:
       - "3000:3000"
