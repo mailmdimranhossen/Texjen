@@ -14,31 +14,31 @@ import { useSettings } from "@/components/SettingsProvider";
 
 const fallbackReviews = [
   {
-    name: "Ariful Islam",
+    name: "Tanzina Islam",
     role: "Verified Buyer",
-    content: "The quality of the products is amazing. I was skeptical about ordering online, but this shop proved me wrong. Delivery was super fast too!",
-    image: "https://i.pravatar.cc/80?u=1",
+    content: "The jewellery pieces are breathtaking in real life! The finishing and shine look so luxurious, and the gold plating hasn't faded at all. Super fast delivery!",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
     rating: 5
   },
   {
     name: "Sadia Afrin",
     role: "Regular Customer",
-    content: "Excellent customer service! They helped me choose the right size for my dress. The checkout process was smooth as silk. Highly recommended.",
-    image: "https://i.pravatar.cc/80?u=2",
+    content: "100% authentic cosmetics! Finding genuine skincare and lipstick shades online is tricky, but Texjen never disappoints. Their shade recommendations were spot on.",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
     rating: 5
   },
   {
-    name: "Tanvir Ahmed",
-    role: "Tech Enthusiast",
-    content: "Bought my new headphones from here. Genuine product with warranty. The packaging was very secure. Keep up the good work!",
-    image: "https://i.pravatar.cc/80?u=3",
+    name: "Mehnaz Chowdhury",
+    role: "Beauty Enthusiast",
+    content: "Ordered a bridal necklace set and a few serum essentials. The packaging was so secure and premium. Definitely my go-to shop for jewellery and beauty!",
+    image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
     rating: 5
   },
   {
     name: "Nusrat Jahan",
     role: "Verified Buyer",
-    content: "I love the variety of products they have. It's my one-stop shop for everything I need. The prices are very competitive compared to other local shops.",
-    image: "https://i.pravatar.cc/80?u=4",
+    content: "Love the earrings and cosmetic collection here. The quality exceeds expectations for the price point. Highly recommend Texjen to everyone!",
+    image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80",
     rating: 5
   }
 ];
