@@ -36,33 +36,33 @@ const Category = mongoose.models.Category || mongoose.model('Category', Category
 
 const categories = [
   {
-    name: 'T-Shirt',
-    slug: 't-shirt',
-    image: '/assets/images/cagetory/t-shirt.webp',
+    name: 'Necklace',
+    slug: 'necklace',
+    image: '/assets/images/cagetory/necklace.webp',
     isActive: true,
   },
   {
-    name: 'Polo-Shirt',
-    slug: 'polo-shirt',
-    image: '/assets/images/cagetory/polo-shirt.webp',
+    name: 'Earring',
+    slug: 'earring',
+    image: '/assets/images/cagetory/earring.webp',
     isActive: true,
   },
   {
-    name: 'Shirt',
-    slug: 'shirt',
-    image: '/assets/images/cagetory/shirt.webp',
+    name: 'Ring',
+    slug: 'ring',
+    image: '/assets/images/cagetory/ring.webp',
     isActive: true,
   },
   {
-    name: 'Hoodie',
-    slug: 'hoodie',
-    image: '/assets/images/cagetory/hoodie.webp',
+    name: 'Cosmetics',
+    slug: 'cosmetics',
+    image: '/assets/images/cagetory/cosmetics.webp',
     isActive: true,
   },
   {
-    name: 'Pants',
-    slug: 'pants',
-    image: '/assets/images/cagetory/pants.webp',
+    name: 'Perfume',
+    slug: 'perfume',
+    image: '/assets/images/cagetory/perfume.webp',
     isActive: true,
   }
 ];
