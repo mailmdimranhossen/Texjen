@@ -123,7 +123,7 @@ export default function FooterV1() {
           <div className="flex flex-col items-center text-center md:items-start md:text-left gap-4 lg:col-span-2">
             <Logo textClassName="text-xl md:text-2xl whitespace-nowrap" />
             <p className="text-sm text-muted-foreground w-full md:w-4/5">
-              Your trusted destination for premium men's clothing, fashion essentials, and high-quality accessories in Bangladesh.
+              Find the latest fashionable jewellery and 100% genuine cosmetics at Texjen. Best deals, cash on delivery, and quick shipping across Bangladesh.
             </p>
 
             {/* PWA Download App Button */}

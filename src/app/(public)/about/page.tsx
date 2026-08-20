@@ -1,13 +1,13 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Shirt, ShieldCheck, Award, Sparkles, HeartHandshake, ArrowRight } from 'lucide-react';
+import { Gem, ShieldCheck, Award, Sparkles, HeartHandshake, ArrowRight, Heart } from 'lucide-react';
 import connectToDatabase from '@/lib/db';
 import GlobalSettings from '@/models/GlobalSettings';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
   title: 'About Us | Texjen',
-  description: 'Texjen - Premium menswear brand in Bangladesh. Explore our high-quality collection of T-shirts, Polo Shirts, Casual & Formal Shirts, and Hoodies designed for modern comfort.',
+  description: 'Texjen - Exclusive Jewellery & 100% Authentic Cosmetics brand in Bangladesh. Explore timeless jewellery, luxury makeup, and trending skincare essentials.',
 };
 
 async function getSettings() {
@@ -42,13 +42,13 @@ export default async function AboutPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.1),rgba(255,255,255,0))]" />
         <div className="container mx-auto px-4 text-center relative z-10">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary mb-4">
-            <Sparkles className="h-3 w-3" /> Premium Menswear & Streetwear
+            <Sparkles className="h-3 w-3" /> Elegant Jewellery & Premium Cosmetics
           </span>
           <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground mb-6">
             About <span className="text-primary">Us</span>
           </h1>
           <p className="text-muted-foreground text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-            Driven by a passion for modern aesthetics and ultimate fabric comfort, <strong className="text-primary">{brandName}</strong> delivers premium quality clothing designed for the contemporary lifestyle. From classic polo shirts to cozy hoodies, we redefine casual sophistication.
+            Driven by a passion for timeless elegance and radiant beauty, <strong className="text-primary">{brandName}</strong> offers curated jewellery collections and 100% authentic cosmetics designed to elevate your everyday glow and special occasions.
           </p>
         </div>
       </section>
@@ -59,7 +59,7 @@ export default async function AboutPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="p-4 space-y-1">
               <p className="text-3xl md:text-4xl font-extrabold text-primary">100%</p>
-              <p className="text-xs md:text-sm text-muted-foreground font-medium">Premium Combed Cotton</p>
+              <p className="text-xs md:text-sm text-muted-foreground font-medium">Authentic & Genuine</p>
             </div>
             <div className="p-4 space-y-1">
               <p className="text-3xl md:text-4xl font-extrabold text-primary">10k+</p>
@@ -83,23 +83,23 @@ export default async function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
-                Connecting Premium Quality Fabrics with Modern Trends
+                Crafting Timeless Elegance & Celebrating Pure Beauty
               </h2>
               <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
-                At Texjen, we believe that style and comfort should go hand in hand. We curate each piece of apparel—whether it is an everyday t-shirt, a smart polo, a classic shirt, or a cozy hoodie—using top-grade fabric blends that ensure durability, breathability, and a premium feel.
+                At {brandName}, we believe that true elegance lies in the details. We curate each piece of jewellery—from dazzling necklaces and earrings to statement bracelets—alongside top-tier skincare and cosmetic essentials that bring out your natural glow.
               </p>
               <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
-                Our materials are ethically sourced and processed under strict quality inspections. By prioritizing advanced stitching techniques, pre-shrunk fabrics, and high-quality dye retention, we ensure you receive long-lasting fashion essentials.
+                Every cosmetic item is carefully inspected for 100% authenticity and skin safety, while our jewellery is crafted with high-grade finishes to ensure long-lasting brilliance.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                 <div className="flex gap-4">
                   <div className="h-10 w-10 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                    <Shirt className="h-5 w-5" />
+                    <Gem className="h-5 w-5" />
                   </div>
                   <div>
                     <h4 className="font-bold text-sm mb-1">Our Mission</h4>
-                    <p className="text-xs text-muted-foreground">To deliver premium, comfortable, and trendy fashion essentials that empower men to look and feel their absolute best.</p>
+                    <p className="text-xs text-muted-foreground">To empower individuals with graceful jewellery designs and authentic beauty products that inspire confidence every day.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -108,7 +108,7 @@ export default async function AboutPage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-sm mb-1">Our Vision</h4>
-                    <p className="text-xs text-muted-foreground">To become Bangladesh's leading choice for premium casual and streetwear fashion by setting standard benchmarks for clothing quality and customer satisfaction.</p>
+                    <p className="text-xs text-muted-foreground">To become Bangladesh's most trusted online destination for premium jewellery and genuine cosmetics, setting standard benchmarks for elegance and authenticity.</p>
                   </div>
                 </div>
               </div>
@@ -127,7 +127,7 @@ export default async function AboutPage() {
                     Our Slogan
                   </span>
                   <blockquote className="text-lg md:text-xl font-bold leading-relaxed italic">
-                    "Define your style with ultimate comfort and premium craftsmanship."
+                    "Elevate your radiance with timeless jewellery and authentic beauty."
                   </blockquote>
                   <p className="text-xs text-slate-300 font-medium">
                     — The {brandName} Family
@@ -145,7 +145,7 @@ export default async function AboutPage() {
           <div className="max-w-2xl mx-auto mb-16 space-y-4">
             <h2 className="text-3xl font-bold tracking-tight">Why Choose Us?</h2>
             <p className="text-muted-foreground text-sm">
-              Discover what makes our menswear collection highly durable, stylish, and comfortable.
+              Discover what makes our jewellery and cosmetics collection truly unique and trusted.
             </p>
           </div>
 
@@ -154,19 +154,19 @@ export default async function AboutPage() {
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                 <ShieldCheck className="h-6 w-6" />
               </div>
-              <h3 className="text-xl font-bold">100% Premium Quality</h3>
+              <h3 className="text-xl font-bold">100% Genuine Cosmetics</h3>
               <p className="text-muted-foreground text-xs leading-relaxed max-w-[280px]">
-                We maintain rigorous quality standards, from choosing top-grade combed yarns to precise stitching.
+                We strictly guarantee authentic and certified skincare & makeup products from trusted brands.
               </p>
             </div>
 
             <div className="bg-background p-8 rounded-2xl border shadow-sm space-y-4 text-center flex flex-col items-center hover:-translate-y-1 transition-all duration-300">
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                <Shirt className="h-6 w-6" />
+                <Gem className="h-6 w-6" />
               </div>
-              <h3 className="text-xl font-bold">Premium Fabric Blends</h3>
+              <h3 className="text-xl font-bold">Exquisite Craftsmanship</h3>
               <p className="text-muted-foreground text-xs leading-relaxed max-w-[280px]">
-                Our clothing line features high GSM fabrics, pre-shrunk cotton, and highly durable stitching for long-lasting fit.
+                Our jewellery pieces feature premium plating, fine stone settings, and long-lasting shine.
               </p>
             </div>
 
@@ -174,9 +174,9 @@ export default async function AboutPage() {
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                 <Award className="h-6 w-6" />
               </div>
-              <h3 className="text-xl font-bold">Trusted Fit & Comfort</h3>
+              <h3 className="text-xl font-bold">Trusted by Thousands</h3>
               <p className="text-muted-foreground text-xs leading-relaxed max-w-[280px]">
-                Thousands of satisfied fashion-conscious clients across Bangladesh trust Texjen for their daily wear.
+                Delivering elegance and beauty across Bangladesh with trusted customer care and hassle-free returns.
               </p>
             </div>
           </div>
@@ -210,7 +210,7 @@ export default async function AboutPage() {
               rel="noopener"
               className="text-primary font-semibold hover:underline transition-all"
             >
-              Fashion Web Design Agency
+              Fashion & Beauty Web Design Agency
             </a>
             , we combine beautiful aesthetics with clean, scalable code to empower brands and establish ultimate online authority.
           </p>
@@ -221,15 +221,15 @@ export default async function AboutPage() {
       <section className="py-20 text-center relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10 space-y-6">
           <h2 className="text-3xl md:text-5xl font-black tracking-tight max-w-2xl mx-auto leading-tight">
-            Upgrade Your Wardrobe with Texjen Essentials
+            Discover Your Signature Look with Texjen
           </h2>
           <p className="text-muted-foreground max-w-lg mx-auto text-sm">
-            Browse our collection today and choose the perfect outfits for your everyday look.
+            Browse our exclusive jewellery & cosmetics collections today and enhance your everyday elegance.
           </p>
           <div className="flex flex-wrap gap-4 justify-center pt-4">
             <Link href="/shop" passHref>
               <Button size="lg" className="rounded-full px-8 py-6 font-black uppercase text-sm tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
-                Shop Our Collection <ArrowRight className="ml-2 h-4 w-4" />
+                Shop Collection <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
             <Link href="/contact" passHref>
