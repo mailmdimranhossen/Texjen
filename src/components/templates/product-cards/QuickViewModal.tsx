@@ -7,7 +7,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Heart, X, Plus, Minus } from 'lucide-react';
 import { RatingStars } from '@/components/ui/rating-stars';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useReducer } from 'react';
 import { useAppDispatch } from '@/store/hooks';
 import { addToCart } from '@/store/slices/cartSlice';
 import { toast } from 'sonner';
@@ -25,13 +25,50 @@ interface QuickViewModalProps {
   onClose: () => void;
 }
 
+type VariantState = {
+  selectedColor: string | null;
+  selectedSize: string | null;
+  quantity: number;
+  activeImage: string;
+};
+type VariantAction =
+  | { type: 'RESET'; payload: VariantState }
+  | { type: 'SET_COLOR'; color: string | null }
+  | { type: 'SET_SIZE'; size: string | null }
+  | { type: 'SET_QUANTITY'; quantity: number }
+  | { type: 'SET_IMAGE'; image: string };
+
+function variantReducer(state: VariantState, action: VariantAction): VariantState {
+  switch (action.type) {
+    case 'RESET':        return action.payload;
+    case 'SET_COLOR':    return { ...state, selectedColor: action.color };
+    case 'SET_SIZE':     return { ...state, selectedSize: action.size };
+    case 'SET_QUANTITY': return { ...state, quantity: action.quantity };
+    case 'SET_IMAGE':    return { ...state, activeImage: action.image };
+    default:             return state;
+  }
+}
+
 export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps) {
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [quantity, setQuantity] = useState(1);
-  const [activeImage, setActiveImage] = useState(product.images?.[0] || '/placeholder.jpg');
+
+  const [variantState, variantDispatch] = useReducer(variantReducer, {
+    selectedColor: null,
+    selectedSize: null,
+    quantity: 1,
+    activeImage: product.images?.[0] || '/placeholder.jpg',
+  });
+
+  const selectedColor = variantState.selectedColor;
+  const selectedSize  = variantState.selectedSize;
+  const quantity      = variantState.quantity;
+  const activeImage   = variantState.activeImage;
+
+  const setSelectedColor = (color: string | null) => variantDispatch({ type: 'SET_COLOR', color });
+  const setSelectedSize  = (size:  string | null) => variantDispatch({ type: 'SET_SIZE',  size });
+  const setQuantity      = (q: number)            => variantDispatch({ type: 'SET_QUANTITY', quantity: q });
+  const setActiveImage   = (image: string)        => variantDispatch({ type: 'SET_IMAGE', image });
 
   // Derive available options from variants
   const uniqueColors = useMemo(() =>
@@ -61,27 +98,104 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
     [product.variants, selectedColor, selectedSize]
   );
 
+  const hasVariants = product.variants && product.variants.length > 0;
+  const currentVariant = activeVariant || (hasVariants ? product.variants[0] : null);
+
+  const displayPrice = hasVariants ? (currentVariant?.price ?? 0) : product.price;
+  const displaySalePrice = hasVariants ? currentVariant?.salePrice : product.salePrice;
+  const displayStock = hasVariants ? (currentVariant?.stock ?? 0) : (product.stock ?? 0);
+  const displaySku = hasVariants ? (currentVariant?.sku ?? '') : product.sku;
+
+  const allImages = useMemo(() => {
+    if (hasVariants) {
+      const variantImgs = Array.from(
+        new Set((product.variants || []).map((v: any) => v.image).filter(Boolean))
+      ) as string[];
+
+      if (activeVariant?.image) {
+        const idx = variantImgs.indexOf(activeVariant.image);
+        if (idx > -1) {
+          variantImgs.splice(idx, 1);
+        }
+        variantImgs.unshift(activeVariant.image);
+      }
+      return variantImgs.length > 0 ? variantImgs : (product.images || []);
+    }
+    return product.images || [];
+  }, [product.images, product.variants, activeVariant, hasVariants]);
+
+  // Reset state when modal opens or product changes.
+  // Uses a single reducer dispatch so all state updates are batched into one render.
   useEffect(() => {
     if (isOpen) {
       const initialColor = uniqueColors[0] || null;
-      setSelectedColor(initialColor);
-
       const initialSizes = (product.variants || [])
         .filter((v: any) => !initialColor || v.color === initialColor)
         .map((v: any) => v.size)
         .filter(Boolean);
       const initialSize = initialSizes[0] || null;
-      setSelectedSize(initialSize);
-      setQuantity(1);
-      setActiveImage(product.images?.[0] || '/placeholder.jpg');
+      const defaultVar = product.variants && product.variants.length > 0 ? product.variants[0] : null;
+      const initialImg = defaultVar?.image || product.images?.[0] || '/placeholder.jpg';
+      variantDispatch({
+        type: 'RESET',
+        payload: {
+          selectedColor: initialColor,
+          selectedSize: initialSize,
+          quantity: 1,
+          activeImage: initialImg,
+        },
+      });
+    } else {
+      variantDispatch({
+        type: 'RESET',
+        payload: {
+          selectedColor: null,
+          selectedSize: null,
+          quantity: 1,
+          activeImage: product.images?.[0] || '/placeholder.jpg',
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, product?._id]);
 
+  // Sync activeImage when active variant changes — done via useEffect
+  useEffect(() => {
+    if (!isOpen) return;
+    if (activeVariant?.image) {
+      setActiveImage(activeVariant.image);
+    } else if (hasVariants) {
+      const firstVarWithImg = (product.variants || []).find((v: any) => v.image);
+      setActiveImage(firstVarWithImg?.image || product.images?.[0] || '/placeholder.jpg');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeVariant]);
+
+  // Fix selectedSize if out of available sizes — done via useEffect
+  useEffect(() => {
+    if (!isOpen) return;
+    if (selectedSize == null || !availableSizes.includes(selectedSize)) {
+      setSelectedSize(availableSizes[0] || null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [availableSizes]);
+
+  // Clamp quantity to available stock — derived during render, no effect needed
+  const effectiveQuantity =
+    isOpen && displayStock > 0 && quantity > displayStock
+      ? displayStock
+      : quantity;
+
+
+  useEffect(() => {
+    if (isOpen) {
       // Track ViewContent for Quick View
       const viewContentPayload = {
         content_name: product.name,
         content_category: product.categories?.[0]?.name || 'Uncategorized',
         content_ids: [product._id],
         content_type: 'product',
-        value: product.salePrice || product.price,
+        value: displaySalePrice || displayPrice,
         currency: 'BDT'
       };
       const trackingUser = {
@@ -92,22 +206,9 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
       fbEvent('ViewContent', viewContentPayload, trackingUser);
       ttEvent('ViewContent', viewContentPayload, trackingUser);
     }
-  }, [isOpen, uniqueColors, product.variants, product.images, session]);
+  }, [isOpen, product._id, session, displayPrice, displaySalePrice, product.name, product.categories]);
 
-  useEffect(() => {
-    if (selectedSize == null || !availableSizes.includes(selectedSize)) {
-      setSelectedSize(availableSizes[0] || null);
-    }
-  }, [selectedColor, availableSizes]);
-
-  useEffect(() => {
-    if (activeVariant?.image) {
-      setActiveImage(activeVariant.image);
-    }
-  }, [activeVariant]);
-
-  const displayPrice = activeVariant?.price || product.price;
-  const displaySalePrice = activeVariant?.salePrice || product.salePrice;
+  // effectiveQuantity is already clamped above — no render-body setState needed
 
   const router = useRouter();
 
@@ -119,8 +220,8 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
       name: product.name,
       price: (displaySalePrice !== undefined && displaySalePrice !== null) ? displaySalePrice : displayPrice,
       basePrice: displayPrice,
-      quantity: quantity,
-      image: activeVariant?.image || product.images?.[0],
+      quantity: effectiveQuantity,
+      image: activeImage,
       color: selectedColor || undefined,
       size: selectedSize || undefined
     }));
@@ -131,9 +232,9 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
       content_category: product.categories?.[0]?.name || 'Uncategorized',
       content_ids: [product._id],
       content_type: 'product',
-      value: (displaySalePrice ?? displayPrice) * quantity,
+      value: (displaySalePrice ?? displayPrice) * effectiveQuantity,
       currency: 'BDT',
-      quantity: quantity
+      quantity: effectiveQuantity
     };
     const trackingUser = {
       em: session?.user?.email || undefined,
@@ -148,18 +249,18 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
     } else {
       toast.success(`${product.name} added to cart`);
     }
-    
+
     onClose();
   };
 
-  const discountPercentage = product.price && product.salePrice
-    ? Math.round(((product.price - product.salePrice) / product.price) * 100)
+  const discountPercentage = displayPrice && displaySalePrice
+    ? Math.round(((displayPrice - displaySalePrice) / displayPrice) * 100)
     : 0;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-5xl w-[95vw] p-0 overflow-hidden bg-white border-none rounded-none shadow-2xl [&>button:not(.custom-close)]:hidden">
-        <button 
+        <button
           onClick={onClose}
           className="custom-close absolute right-4 top-4 z-[100] p-2 bg-red-500 hover:bg-red-600 text-white rounded-sm shadow-xl transition-all"
         >
@@ -181,9 +282,9 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
             </div>
 
             {/* Thumbnails at the bottom of sticky image */}
-            {product.images?.length > 1 && (
+            {allImages?.length > 1 && (
               <div className="flex gap-2 overflow-x-auto py-4 w-full justify-center scrollbar-hide px-4 absolute bottom-0 bg-white/20 backdrop-blur-sm">
-                {product.images.map((img: string, idx: number) => (
+                {allImages.map((img: string, idx: number) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImage(img)}
@@ -214,23 +315,27 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
 
             <div className="flex items-baseline gap-3 mb-4 pb-4 border-b border-gray-100">
               <span className="text-3xl font-bold text-primary">
-                ৳{Math.round(activeVariant?.salePrice ?? activeVariant?.price ?? product.salePrice ?? product.price)}
+                ৳{Math.round(displaySalePrice || displayPrice)}
               </span>
-              {(activeVariant?.salePrice ?? product.salePrice) != null && (
+              {displaySalePrice != null && (
                 <span className="text-lg line-through text-gray-400">
-                  ৳{Math.round(activeVariant?.price ?? product.price)}
+                  ৳{Math.round(displayPrice)}
                 </span>
               )}
             </div>
 
             <div className="space-y-1 mb-6 text-sm">
               <div className="flex items-center gap-2">
-                <span className={`h-2 w-2 rounded-none ${product.stock > 0 ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                <span className={`h-2 w-2 rounded-none ${displayStock > 0 ? 'bg-green-500' : 'bg-red-500'}`}></span>
                 <span className="font-medium text-gray-600">
-                  {product.stock > 0 ? `In stock (${product.stock} units)` : 'Out of stock'}
+                  {displayStock > 0 ? `In stock (${displayStock} units)` : 'Out of stock'}
                 </span>
-                <span className="text-gray-300 mx-1">|</span>
-                <span className="text-gray-500 uppercase">SKU: {product.sku || 'N/A'}</span>
+                {displaySku && (
+                  <>
+                    <span className="text-gray-300 mx-1">|</span>
+                    <span className="text-gray-500 uppercase">SKU: {displaySku}</span>
+                  </>
+                )}
               </div>
             </div>
 
@@ -319,9 +424,12 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                 >
                   <Minus className="h-3 w-3" />
                 </button>
-                <span className="w-10 text-center font-bold text-sm">{quantity}</span>
+                <span className="w-10 text-center font-bold text-sm">{effectiveQuantity}</span>
                 <button
-                  onClick={() => setQuantity(quantity + 1)}
+                  onClick={() => {
+                    if (displayStock <= 0) return;
+                    setQuantity(Math.min(displayStock, quantity + 1));
+                  }}
                   className="px-4 py-2 hover:bg-gray-200 transition-colors"
                 >
                   <Plus className="h-3 w-3" />
@@ -329,14 +437,23 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
               </div>
 
               <Button
+                className="flex-grow h-12 bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-widest text-[10px] rounded-none shadow-lg shadow-primary/20"
+                onClick={(e) => handleAddToCart(e)}
+                disabled={(activeVariant?.stock ?? product.stock) === 0}
+              >
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                {(activeVariant?.stock ?? product.stock) === 0 ? 'Out of Stock' : 'Add to Cart'}
+              </Button>
+
+              <Button
                 className="flex-grow h-12 bg-black hover:bg-neutral-800 text-white font-bold uppercase tracking-widest text-[10px] rounded-none shadow-lg"
                 onClick={(e) => handleAddToCart(e, true)}
                 disabled={(activeVariant?.stock ?? product.stock) === 0}
               >
-                {(activeVariant?.stock ?? product.stock) === 0 ? 'Out of Stock' : 'অর্ডার করুন'}
+                Buy Now
               </Button>
 
-              <button 
+              <button
                 onClick={() => {
                   const addToWishlistPayload = {
                     content_name: product.name,
