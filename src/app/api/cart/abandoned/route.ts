@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import connectToDatabase from '@/lib/db';
 import AbandonedCart from '@/models/AbandonedCart';
+import mongoose from 'mongoose';
 
 // GET all active abandoned carts (Admin/Manager only)
 export async function GET(req: NextRequest) {
@@ -77,7 +78,8 @@ export async function POST(req: NextRequest) {
     await connectToDatabase();
 
     const session = await auth();
-    const userId = session?.user?.id;
+    const rawUserId = session?.user?.id;
+    const userId = rawUserId && mongoose.Types.ObjectId.isValid(rawUserId) ? rawUserId : undefined;
 
     // Normalize Bangla digits to English digits and sanitize phone
     const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];

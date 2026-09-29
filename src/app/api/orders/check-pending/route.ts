@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/db';
 import Order from '@/models/Order';
 import { auth } from '@/auth';
+import mongoose from 'mongoose';
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest) {
     await connectToDatabase();
 
     const queryConditions: any[] = [];
-    if (sessionUser?.user?.id) {
+    if (sessionUser?.user?.id && mongoose.Types.ObjectId.isValid(sessionUser.user.id)) {
       queryConditions.push({ user: sessionUser.user.id });
     }
     if (phone && phone.trim().length >= 1) {

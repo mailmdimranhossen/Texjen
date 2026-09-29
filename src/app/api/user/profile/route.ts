@@ -2,18 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import connectToDatabase from '@/lib/db';
 import User from '@/models/User';
+import mongoose from 'mongoose';
 
 
 export async function GET(req: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session || !session.user || !session.user.id) {
+    if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     await connectToDatabase();
-    const user = await User.findOne({ _id: session.user.id }).select('-password').lean();
+    let user = null;
+    if (session.user.id && mongoose.Types.ObjectId.isValid(session.user.id)) {
+      user = await User.findOne({ _id: session.user.id }).select('-password').lean();
+    }
+    if (!user && session.user.email) {
+      user = await User.findOne({ email: session.user.email.toLowerCase() }).select('-password').lean();
+    }
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
@@ -30,7 +37,7 @@ export async function PUT(req: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session || !session.user || !session.user.id) {
+    if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -42,7 +49,13 @@ export async function PUT(req: NextRequest) {
     }
 
     await connectToDatabase();
-    const user = await User.findOne({ _id: session.user.id });
+    let user = null;
+    if (session.user.id && mongoose.Types.ObjectId.isValid(session.user.id)) {
+      user = await User.findOne({ _id: session.user.id });
+    }
+    if (!user && session.user.email) {
+      user = await User.findOne({ email: session.user.email.toLowerCase() });
+    }
     
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });

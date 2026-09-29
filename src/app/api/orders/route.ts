@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
 
     // Check for pending/unconfirmed orders ('Order Placed')
     const queryConditions: any[] = [];
-    if (sessionUser?.user?.id) {
+    if (sessionUser?.user?.id && mongoose.Types.ObjectId.isValid(sessionUser.user.id)) {
       queryConditions.push({ user: sessionUser.user.id });
     }
     if (shippingAddress.phone) {
@@ -126,9 +126,13 @@ export async function POST(req: NextRequest) {
     session.startTransaction();
 
     let user = null;
-    if (sessionUser?.user?.id) {
+    if (sessionUser?.user?.id && mongoose.Types.ObjectId.isValid(sessionUser.user.id)) {
       user = await User.findOne({ _id: sessionUser.user.id }).session(session);
-    } else {
+    } else if (sessionUser?.user?.email) {
+      user = await User.findOne({ email: sessionUser.user.email.toLowerCase() }).session(session);
+    }
+
+    if (!user) {
       // Guest Checkout: Find or Create User by Email
       user = await User.findOne({ email: shippingAddress.email.toLowerCase() }).session(session);
 
@@ -280,7 +284,7 @@ export async function POST(req: NextRequest) {
         if (!product) throw new Error('Product not found during price verification');
 
         const hasVariant = !!(item.color || item.size);
-        let itemPrice = product.salePrice ?? product.price;
+        let itemPrice = (product.salePrice && product.salePrice > 0) ? product.salePrice : product.price;
         let itemPurchasePrice = product.purchasePrice ?? 0;
 
         if (hasVariant) {
@@ -289,10 +293,16 @@ export async function POST(req: NextRequest) {
             String(v.size || '').trim() === String(item.size || '').trim()
           );
           if (variant) {
-            itemPrice = (variant.salePrice ?? variant.price) ?? (product.salePrice ?? product.price);
-            itemPurchasePrice = variant.purchasePrice ?? product.purchasePrice ?? 0;
+            const vSalePrice = (variant.salePrice && variant.salePrice > 0) ? variant.salePrice : null;
+            const vPrice = (variant.price && variant.price > 0) ? variant.price : null;
+            const pSalePrice = (product.salePrice && product.salePrice > 0) ? product.salePrice : null;
+
+            itemPrice = vSalePrice || pSalePrice || vPrice || product.price;
+            itemPurchasePrice = variant.purchasePrice || product.purchasePrice || 0;
           }
         }
+
+        itemPrice = Math.max(Number(itemPrice) || 0, 0.01);
 
         serverComputedTotal += itemPrice * item.quantity;
 
